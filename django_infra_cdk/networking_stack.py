@@ -1,18 +1,14 @@
 from aws_cdk import Stack
 from constructs import Construct
 from aws_cdk import aws_ec2 as ec2
-from aws_cdk import CfnOutput
-from django_infra_cdk.networking_stack import NetworkingStack
 
 
-class DjangoInfraCdkStack(Stack):
+class NetworkingStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs):
+        super().__init__(scope, id, **kwargs)
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
-
-        # Deploy Network Stack
-        networking_stack = ec2.Vpc(
-            self, "Vpc",
+        self.vpc = ec2.Vpc(
+            self, id,
             max_azs=2,  # Default is all AZs in the region
             nat_gateways=1,  # Use a single NAT gateway for cost efficiency
             subnet_configuration=[
@@ -28,5 +24,3 @@ class DjangoInfraCdkStack(Stack):
                 ),
             ],
         )
-
-
