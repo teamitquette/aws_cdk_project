@@ -3,12 +3,14 @@ from constructs import Construct
 from aws_cdk import aws_ec2 as ec2
 
 
-class NetworkingStack(Stack):
-    def __init__(self, scope: Construct, id: str, **kwargs):
-        super().__init__(scope, id, **kwargs)
+def get_networking_stack(root_construct: Construct, id: str) -> ec2.Vpc:
+    """
+    Function to get the networking stack.
+    This function can be used to retrieve the VPC created in the NetworkingStack.
+    """
 
-        self.vpc = ec2.Vpc(
-            self, id,
+    return ec2.Vpc(
+            root_construct, id,
             max_azs=2,  # Default is all AZs in the region
             nat_gateways=1,  # Use a single NAT gateway for cost efficiency
             subnet_configuration=[
@@ -24,3 +26,4 @@ class NetworkingStack(Stack):
                 ),
             ],
         )
+
